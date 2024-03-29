@@ -28,29 +28,20 @@ const HomeComponent = () => {
       lifeExpectancy: parseInt(formState.lifeExpectancy, 10),
       retirementAge: parseInt(formState.retirementAge, 10),
       returnOnInvestment: parseFloat(formState.returnOnInvestment),
-      marriageStatus: parseInt(formState.marriageStatus, 10),
+      marriageStatus: formState.marriageStatus,
       bendpoint1: parseInt(formState.bendpoint1, 10),
       bendpoint2: parseInt(formState.bendpoint2, 10),
       aime: parseInt(formState.aime, 10)
     };
-
-    try {
-      const response = await axios({
-        method: 'post',
-        url: 'https://kmytkxbdd5.execute-api.us-east-2.amazonaws.com/calculate',
-        headers: { 'Content-Type': 'application/json',  'Access-Control-Allow-Origin': '*'  },
-        data: JSON.stringify(postData),
-        maxBodyLength: Infinity
-      });
-      
-      console.log('Form submission successful:', response.data);
-      alert('Form submission successful: ' + JSON.stringify(response.data));
-    } catch (error) {
-      console.error('Form submission failed:', error);
-      alert('Form submission failed: ' + error.message);
-    }
-  };
-
+    console.log(postData);
+    axios.post('https://kmytkxbdd5.execute-api.us-east-2.amazonaws.com/calculate', JSON.stringify(postData))
+    .then(function (response) {
+      console.log('Response:', response.data); // Accessing the response data
+    })
+    .catch(function (error) {
+      console.log('Error:', error.message); // Accessing the error message
+    });
+  }
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
       <TextField
@@ -61,7 +52,7 @@ const HomeComponent = () => {
         onChange={handleChange}
         margin="normal"
       />
-      
+
       <TextField
         label="Life Expectancy"
         type="number"
@@ -70,7 +61,7 @@ const HomeComponent = () => {
         onChange={handleChange}
         margin="normal"
       />
-      
+
       <TextField
         label="Retirement Age"
         type="number"
@@ -79,7 +70,7 @@ const HomeComponent = () => {
         onChange={handleChange}
         margin="normal"
       />
-      
+
       <TextField
         label="Return on Investment"
         type="number"
@@ -89,9 +80,7 @@ const HomeComponent = () => {
         margin="normal"
         inputProps={{ step: "0.01" }}
       />
-      
 
-      
       <TextField
         label="Bendpoint1"
         type="number"
@@ -100,7 +89,7 @@ const HomeComponent = () => {
         onChange={handleChange}
         margin="normal"
       />
-      
+
       <TextField
         label="Bendpoint2"
         type="number"
@@ -109,7 +98,7 @@ const HomeComponent = () => {
         onChange={handleChange}
         margin="normal"
       />
-      
+
       <TextField
         label="AIME"
         type="number"
@@ -119,7 +108,7 @@ const HomeComponent = () => {
         margin="normal"
       />
 
-<FormControl margin="normal">
+      <FormControl margin="normal">
         <InputLabel id="marriage-status-label">Marriage Status</InputLabel>
         <Select
           labelId="marriage-status-label"
@@ -127,6 +116,7 @@ const HomeComponent = () => {
           name="marriageStatus"
           value={formState.marriageStatus}
           onChange={handleChange}
+          label="Marriage Status"
         >
           <MenuItem value="0">Single</MenuItem>
           <MenuItem value="1">Married</MenuItem>
