@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { TextField, Select, MenuItem, Button, FormControl, InputLabel, Box } from '@mui/material';
+import { TextField, Select, MenuItem, Button, FormControl, InputLabel, Box, Typography, FormHelperText } from '@mui/material';
 
 const HomeComponent = () => {
   const [formState, setFormState] = useState({
@@ -9,46 +9,33 @@ const HomeComponent = () => {
     retirementAge: '',
     returnOnInvestment: '',
     marriageStatus: '',
-    bendpoint1: '',
-    bendpoint2: '',
-    aime: ''
+    aime: '',
   });
+
+  
+
+
+  const [responseMessage, setResponseMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormState(prevState => ({
+    // if (name === 'lifeExpectancy' && value.length > 3) {
+    //   return;
+    // }
+    setFormState((prevState) => ({
       ...prevState,
       [name]: value,
     }));
   };
 
-  const submitForm = async () => {
-    const postData = {
-      currentAge: parseInt(formState.currentAge, 10),
-      lifeExpectancy: parseInt(formState.lifeExpectancy, 10),
-      retirementAge: parseInt(formState.retirementAge, 10),
-      returnOnInvestment: parseFloat(formState.returnOnInvestment),
-      marriageStatus: parseInt(formState.marriageStatus, 10),
-      bendpoint1: parseInt(formState.bendpoint1, 10),
-      bendpoint2: parseInt(formState.bendpoint2, 10),
-      aime: parseInt(formState.aime, 10)
-    };
-
-    try {
-      const response = await axios({
-        method: 'post',
-        url: 'https://kmytkxbdd5.execute-api.us-east-2.amazonaws.com/calculate',
-        headers: { 'Content-Type': 'application/json',  'Access-Control-Allow-Origin': '*'  },
-        data: JSON.stringify(postData),
-        maxBodyLength: Infinity
+  const submitForm = () => {
+    axios.post('https://kmytkxbdd5.execute-api.us-east-2.amazonaws.com/calculate', JSON.stringify(formState))
+      .then(response => {
+        setResponseMessage('Form submission successful: ' + JSON.stringify(response.data));
+      })
+      .catch(error => {
+        setResponseMessage('Form submission failed: ' + error.message);
       });
-      
-      console.log('Form submission successful:', response.data);
-      alert('Form submission successful: ' + JSON.stringify(response.data));
-    } catch (error) {
-      console.error('Form submission failed:', error);
-      alert('Form submission failed: ' + error.message);
-    }
   };
 
   return (
@@ -60,17 +47,20 @@ const HomeComponent = () => {
         value={formState.currentAge}
         onChange={handleChange}
         margin="normal"
+        sx={{ width: '250px' }}
       />
-      
-      <TextField
-        label="Life Expectancy"
-        type="number"
-        name="lifeExpectancy"
-        value={formState.lifeExpectancy}
-        onChange={handleChange}
-        margin="normal"
-      />
-      
+
+      <FormControl margin="normal" sx={{ width: '250px' }}>
+        <TextField
+          label="Life Expectancy"
+          type="number"
+          name="lifeExpectancy"
+          value={formState.lifeExpectancy}
+          onChange={handleChange}
+        />
+        <FormHelperText>Should not exceed 3 digits</FormHelperText>
+      </FormControl>
+
       <TextField
         label="Retirement Age"
         type="number"
@@ -78,8 +68,9 @@ const HomeComponent = () => {
         value={formState.retirementAge}
         onChange={handleChange}
         margin="normal"
+        sx={{ width: '250px' }}
       />
-      
+
       <TextField
         label="Return on Investment"
         type="number"
@@ -87,29 +78,10 @@ const HomeComponent = () => {
         value={formState.returnOnInvestment}
         onChange={handleChange}
         margin="normal"
-        inputProps={{ step: "0.01" }}
+        inputProps={{ step: '0.01' }}
+        sx={{ width: '250px' }}
       />
-      
 
-      
-      <TextField
-        label="Bendpoint1"
-        type="number"
-        name="bendpoint1"
-        value={formState.bendpoint1}
-        onChange={handleChange}
-        margin="normal"
-      />
-      
-      <TextField
-        label="Bendpoint2"
-        type="number"
-        name="bendpoint2"
-        value={formState.bendpoint2}
-        onChange={handleChange}
-        margin="normal"
-      />
-      
       <TextField
         label="AIME"
         type="number"
@@ -117,9 +89,10 @@ const HomeComponent = () => {
         value={formState.aime}
         onChange={handleChange}
         margin="normal"
+        sx={{ width: '250px' }}
       />
 
-<FormControl margin="normal">
+      <FormControl margin="normal" sx={{ width: '250px' }}>
         <InputLabel id="marriage-status-label">Marriage Status</InputLabel>
         <Select
           labelId="marriage-status-label"
@@ -127,15 +100,28 @@ const HomeComponent = () => {
           name="marriageStatus"
           value={formState.marriageStatus}
           onChange={handleChange}
+          label="Marriage Status"
         >
-          <MenuItem value="0">Single</MenuItem>
-          <MenuItem value="1">Married</MenuItem>
+          <MenuItem value="Single">Single</MenuItem>
+          <MenuItem value="Married">Married</MenuItem>
         </Select>
       </FormControl>
 
-      <Button variant="contained" color="primary" onClick={submitForm} sx={{ mt: 2 }}>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={submitForm}
+        // disabled={parseInt(formState.lifeExpectancy, 10) > 999}
+        sx={{ mt: 2 }}
+      >
         Submit
       </Button>
+
+      {responseMessage && (
+        <Typography variant="body1" sx={{ mt: 2, textAlign: 'center' }}>
+          {responseMessage}
+        </Typography>
+      )}
     </Box>
   );
 };
