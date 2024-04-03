@@ -75,7 +75,7 @@ const HomeComponent = () => {
       />
 
       <TextField
-        label="Return on Investment"
+        label="Return on Investment %"
         type="number"
         name="returnOnInvestment"
         value={formState.returnOnInvestment}
