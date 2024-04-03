@@ -12,30 +12,33 @@ const HomeComponent = () => {
     aime: '',
   });
 
-  
-
-
   const [responseMessage, setResponseMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    // if (name === 'lifeExpectancy' && value.length > 3) {
-    //   return;
-    // }
+    let parsedValue = value;
+
+    if (['currentAge', 'lifeExpectancy', 'retirementAge', 'aime'].includes(name)) {
+      parsedValue = parseInt(value, 10) || '';
+    } else if (name === 'returnOnInvestment') {
+      parsedValue = parseFloat(value) || '';
+    }
+
     setFormState((prevState) => ({
       ...prevState,
-      [name]: value,
+      [name]: parsedValue,
     }));
   };
 
   const submitForm = () => {
+    console.log(formState);
     axios.post('https://kmytkxbdd5.execute-api.us-east-2.amazonaws.com/calculate', JSON.stringify(formState))
-      .then(response => {
-        setResponseMessage('Form submission successful: ' + JSON.stringify(response.data));
-      })
-      .catch(error => {
-        setResponseMessage('Form submission failed: ' + error.message);
-      });
+    .then((response) => {
+      setResponseMessage('Form submission successful: ' + JSON.stringify(response.data));
+    })
+    .catch((error) => {
+      setResponseMessage('Form submission failed: ' + error.message);
+    });
   };
 
   return (
@@ -111,7 +114,6 @@ const HomeComponent = () => {
         variant="contained"
         color="primary"
         onClick={submitForm}
-        // disabled={parseInt(formState.lifeExpectancy, 10) > 999}
         sx={{ mt: 2 }}
       >
         Submit
