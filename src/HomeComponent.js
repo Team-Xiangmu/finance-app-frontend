@@ -23,7 +23,7 @@ const ResponseDisplayComponent = ({ responseData }) => {
   };
 
   return (
-    <Box sx={{ width: '100%', m: 'auto', p: 2, mt: 4 }}>
+    <Box sx={{ width: '70%', m: 'auto', p: 2, mt: 4 }}>
       <Typography variant="h6" gutterBottom component="div">
         Submission Results
       </Typography>
@@ -71,12 +71,12 @@ const ResponseDisplayComponent = ({ responseData }) => {
 
 const HomeComponent = () => {
   const [formState, setFormState] = useState({
-    currentAge: '',
-    lifeExpectancy: '',
-    retirementAge: '',
-    returnOnInvestment: '',
-    marriageStatus: '',
-    aime: '',
+    currentAge: 25,
+    lifeExpectancy: 90,
+    retirementAge: 65,
+    returnOnInvestment: 3,
+    marriageStatus: 'Single',
+    aime: 2500,
   });
 
   const [responseMessage, setResponseMessage] = useState('');
