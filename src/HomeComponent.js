@@ -23,26 +23,32 @@ const ResponseDisplayComponent = ({ responseData }) => {
   };
 
   return (
-    <Box sx={{ maxWidth: 800, m: 'auto', p: 2, mt: 4 }}>
-      <Typography variant="h6" gutterBottom>Submission Results</Typography>
-      {/* Display the rest of the data */}
-      {/* ... */}
+    <Box sx={{ width: '100%', m: 'auto', p: 2, mt: 4 }}>
+      <Typography variant="h6" gutterBottom component="div">
+        Submission Results
+      </Typography>
       
-      <Typography variant="h6" sx={{ mt: 3 }}>PIA Array</Typography>
+      <Typography variant="h6" sx={{ mt: 3 }} component="div">
+        PIA Array
+      </Typography>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <TableContainer>
-          <Table stickyHeader aria-label="pia-array" size="small">
+        <TableContainer component={Paper}>
+          <Table stickyHeader aria-label="pia-array" size="medium" sx={{ minWidth: 750 }}>
             <TableHead>
-              <TableRow>
+              <TableRow sx={{ '& .MuiTableCell-root': { bgcolor: '#1976d2', color: '#fff', fontSize: '1rem' } }}>
                 <TableCell>Age</TableCell>
                 <TableCell align="right">Value</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {piaArray.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(([age, value]) => (
-                <TableRow key={age}>
-                  <TableCell component="th" scope="row">{age}</TableCell>
-                  <TableCell align="right">{parseFloat(value).toFixed(2)}</TableCell>
+                <TableRow key={age} sx={{ '&:nth-of-type(odd)': { bgcolor: '#f5f5f5' }, '& .MuiTableCell-root': { fontSize: '0.875rem' } }}>
+                  <TableCell component="th" scope="row">
+                    {age}
+                  </TableCell>
+                  <TableCell align="right">
+                    {parseFloat(value).toFixed(2)}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -56,6 +62,7 @@ const ResponseDisplayComponent = ({ responseData }) => {
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
+          sx={{ '.MuiTablePagination-toolbar': { justifyContent: 'flex-end' }, '.MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows': { margin: 0 } }}
         />
       </Paper>
     </Box>
@@ -102,6 +109,9 @@ const HomeComponent = () => {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', mt: 4 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          PIA Calculator
+        </Typography>
       <Box component="form" noValidate autoComplete="off" sx={{ mb: 4 }}>
         <TextField
           label="Current Age"
@@ -112,7 +122,6 @@ const HomeComponent = () => {
           margin="normal"
           sx={{ width: '250px' }}
         />
-
         <FormControl margin="normal" sx={{ width: '250px' }}>
           <TextField
             label="Life Expectancy"
@@ -123,7 +132,6 @@ const HomeComponent = () => {
           />
           <FormHelperText>Should not exceed 3 digits</FormHelperText>
         </FormControl>
-
         <TextField
           label="Retirement Age"
           type="number"
@@ -133,7 +141,6 @@ const HomeComponent = () => {
           margin="normal"
           sx={{ width: '250px' }}
         />
-
         <TextField
           label="Return on Investment %"
           type="number"
@@ -144,7 +151,6 @@ const HomeComponent = () => {
           inputProps={{ step: '0.01' }}
           sx={{ width: '250px' }}
         />
-
         <TextField
           label="AIME"
           type="number"
@@ -154,7 +160,6 @@ const HomeComponent = () => {
           margin="normal"
           sx={{ width: '250px' }}
         />
-
         <FormControl margin="normal" sx={{ width: '250px' }}>
           <InputLabel id="marriage-status-label">Marriage Status</InputLabel>
           <Select
@@ -169,17 +174,16 @@ const HomeComponent = () => {
             <MenuItem value="Married">Married</MenuItem>
           </Select>
         </FormControl>
-
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={submitForm}
-          sx={{ mt: 2 }}
-        >
-          Submit
-        </Button>
+        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', mt: 2 }}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={submitForm}
+          >
+            Submit
+          </Button>
+        </Box>
       </Box>
-
       {responseMessage && (
         <ResponseDisplayComponent responseData={responseMessage} />
       )}
