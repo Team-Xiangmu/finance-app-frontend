@@ -99,7 +99,7 @@ const HomeComponent = () => {
 
   const submitForm = () => {
     console.log(formState);
-    axios.post('https://kmytkxbdd5.execute-api.us-east-2.amazonaws.com/calculate', JSON.stringify(formState))
+    axios.post(process.env.REACT_APP_API_URL, JSON.stringify(formState))
       .then((response) => {
         setResponseMessage('Form submission successful: ' + JSON.stringify(response.data));
       })
