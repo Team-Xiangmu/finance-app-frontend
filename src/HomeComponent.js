@@ -71,12 +71,12 @@ const ResponseDisplayComponent = ({ responseData }) => {
 
 const HomeComponent = () => {
   const [formState, setFormState] = useState({
-    currentAge: 25,
-    lifeExpectancy: 90,
-    retirementAge: 65,
-    returnOnInvestment: 3,
-    marriageStatus: 'Single',
-    aime: 2500,
+    currentAge: '',
+    lifeExpectancy: '',
+    retirementAge: '',
+    returnOnInvestment: '',
+    marriageStatus: '',
+    aime: '',
   });
 
   const [responseMessage, setResponseMessage] = useState('');
@@ -98,6 +98,7 @@ const HomeComponent = () => {
   };
 
   const submitForm = () => {
+    console.log(formState);
     axios.post('https://kmytkxbdd5.execute-api.us-east-2.amazonaws.com/calculate', JSON.stringify(formState))
       .then((response) => {
         setResponseMessage('Form submission successful: ' + JSON.stringify(response.data));
